@@ -113,7 +113,7 @@ int main(){
         }
 
         if(ticker != watchList.back()) {
-            std::cout << "Im gonna wait 12 secs to respect API Limit" << '\n';
+            std::cout << "Im gonna wait 15 secs to respect API Limit" << '\n';
             Sleep(15000);
         }
     }
