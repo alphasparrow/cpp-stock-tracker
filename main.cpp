@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <fstream>
 #include "json.hpp"
 
 using json = nlohmann::json;
@@ -71,7 +72,7 @@ int main(){
     std::vector<std::string> watchList = {"RELIANCE.BSE", "TCS.BSE", "HDFCBANK.BSE", "ICICIBANK.BSE", "SBIN.BSE", "INFY.BSE", "ITC.BSE", "TATAMOTORS.BSE"};
     std::vector<Stock> screenedStocks;
 
-    std::string myKey = "9KPY64HGEV477YFK";
+    std::string myKey = "ADOHUY9QOJ1XLCXD";
 
     for(const std::string& ticker : watchList){
         std::cout << "FETching Data for: " << ticker << "..." << '\n';
@@ -122,5 +123,12 @@ int main(){
     for(const auto& s : screenedStocks) {
         s.display();
     }
+    std::ofstream file("screener_results.csv", std::ios::app);
+    file << "Ticker,Price,Change,Volume,Date\n";
+
+    for(const auto& s : screenedStocks){
+        file << s.symbol << "," << s.currentPrice << "," << s.changePercent << "," << s.volume << "," << s.lastTradeDay << "\n";
+    }
+    file.close();
     return 0;
 }
