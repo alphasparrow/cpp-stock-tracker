@@ -2,6 +2,29 @@
 #include <wininet.h>
 #include <iostream>
 #include <string>
+#include <vector>
+#include "json.hpp"
+
+struct Stock{
+    std::string symbol;
+    double currentPrice;
+    double priceChangePercent;
+    long long volume;
+
+    std::string getSignal() const {
+        if (priceChangePercent > 2.0) return "STRONG BUY";
+        if (priceChangePercent > -2.0) return "STRONG SELL";
+        return "NEUTRAL";
+    }
+
+    void printSummary() const {
+        std::cout << ".........................." << '\n';
+        std::cout << "STOCK: " << symbol << '\n';
+        std::cout << "PRICE: " << currentPrice << '\n';
+        std::cout << "SIGNAL: " << getSignal() << '\n';
+    }
+};
+
 
 std::string getInternetData(std::string url){
     HINTERNET hInternet = InternetOpenA("Mozilla/5.0", INTERNET_OPEN_TYPE_DIRECT, NULL, NULL, 0);
@@ -31,20 +54,7 @@ std::string getInternetData(std::string url){
 int main(){
     std::cout << "Starting Stock Screener..." << '\n';
 
-    std::string url = "https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT";
-    std::string data = getInternetData(url);
-
-    if(data.empty() || data.find("FATAL_ERROR") != std::string::npos){
-        std::cout << "\n[!] NETWORK FAILURE:" << '\n';
-        std::cout << data << '\n';
-    } else {
-        std::cout << "\n[+] SUCCESS! DATA RECEIVED:" << '\n';
-        
-        if(data.length() > 50) {
-            std::cout << data.substr(0,100) << "..." << '\n';
-        }else{
-            std::cout << data << '\n';
-        }
-    }
+    Stock testStock = {"RELIANCE.NS", 2500.50, 2.5, 1000000};   
+    testStock.printSummary();
     return 0;
 }
